@@ -17,10 +17,15 @@ io.on('connection', socket => {
     socket.emit('message', 'Welcome to ChatCord!'); // it will emit to single connected user
 
     // Broadcast when a user connects
-    socket.broadcast.emit('message', 'A user has joined a chat') // it will emit to every body except the connected user
+    socket.broadcast.emit('message', 'A user has joined a chat'); // it will emit to every body except the connected user
 
     socket.on('disconnect', () => {
         io.emit('message', 'A user has left the chat'); // it will emit to every user
+    });
+
+    // Listen for chatMessage
+    socket.on('chatMessage', msg => {
+        io.emit('message', msg);
     })
 
 });
