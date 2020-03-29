@@ -33,6 +33,11 @@ io.on('connection', socket => {
                 'message',
                 formatMessage(botName, `${user.username} has joined a chat`)); // it will emit to every body except the connected user
 
+        // Send users & room info
+        io.to(user.room).emit('roomUsers', {
+            room: user.room,
+            users: getRoomUsers(user.room)
+        });
     });
 
     // Listen for chatMessage
@@ -46,6 +51,12 @@ io.on('connection', socket => {
         const user = userLeave(socket.id);
         if (user) {
             io.to(user.room).emit('message', formatMessage(botName, `${user.username} has left the chat`)); // it will emit to every user    
+
+            // Send users & room info
+            io.to(user.room).emit('roomUsers', {
+                room: user.room,
+                users: getRoomUsers(user.room)
+            });
         }
     });
 });
